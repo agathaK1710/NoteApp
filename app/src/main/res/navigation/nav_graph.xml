@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/allNotesFragment">
+
+    <fragment
+        android:id="@+id/allNotesFragment"
+        android:name="com.android.noteapp.ui.notes.AllNotesFragment"
+        android:label="AllNotesFragment" >
+        <action
+            android:id="@+id/action_allNotesFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/action_allNotesFragment_to_newNoteFragment"
+            app:destination="@id/newNoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.android.noteapp.ui.account.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/newNoteFragment"
+        android:name="com.android.noteapp.ui.notes.NewNoteFragment"
+        android:label="NewNoteFragment" >
+        <argument
+            android:name="note"
+            app:argType="com.android.noteapp.data.local.models.LocalNote"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.android.noteapp.ui.account.RegisterFragment"
+        android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="com.android.noteapp.ui.account.UserInfoFragment"
+        android:label="UserInfoFragment" >
+        <action
+            android:id="@+id/action_userInfoFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_userInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+</navigation>
