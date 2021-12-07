@@ -40,6 +40,10 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         binding?.logoutBtn?.setOnClickListener {
             userViewModel.logout()
         }
+
+        binding?.myNotesbtn?.setOnClickListener{
+            findNavController().navigate(R.id.action_userInfoFragment_to_allNotesFragment)
+        }
         subscribeToCurrentUserEvents()
 
     }
@@ -78,6 +82,7 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         binding?.createAccountBtn?.isVisible = false
         binding?.logoutBtn?.isVisible = true
         binding?.userEmail?.isVisible = true
+        binding?.myNotesbtn?.isVisible = true
     }
 
     private fun userNotLoggedIn(){
@@ -86,6 +91,7 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         binding?.createAccountBtn?.isVisible = true
         binding?.logoutBtn?.isVisible = false
         binding?.userEmail?.isVisible = false
+        binding?.myNotesbtn?.isVisible = false
     }
 
 

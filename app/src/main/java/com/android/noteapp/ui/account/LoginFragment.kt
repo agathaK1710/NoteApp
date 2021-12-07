@@ -48,12 +48,11 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
             when(it){
                 is Result.Success -> {
                     hideProgressBar()
-                    Toast.makeText(requireContext(), "Account Successfully Created!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
                 is Result.Error -> {
                     hideProgressBar()
-                    Log.d("LOGIN", "ERROR ${it.errorMessage.toString()}")
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT).show()
                 }
                 is Result.Loading -> {

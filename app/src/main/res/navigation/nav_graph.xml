@@ -43,5 +43,8 @@
         <action
             android:id="@+id/action_userInfoFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_userInfoFragment_to_allNotesFragment"
+            app:destination="@id/allNotesFragment" />
     </fragment>
 </navigation>

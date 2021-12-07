@@ -32,7 +32,7 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAllnotesBinding.bind(view)
-        //(activity as AppCompatActivity).setSupportActionBar(binding!!.customToolBar)
+        (activity as AppCompatActivity).setSupportActionBar(binding!!.customToolBar)
 
         binding?.newNoteFab?.setOnClickListener {
             findNavController().navigate(R.id.action_allNotesFragment_to_newNoteFragment)
