@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.android.noteapp.R
 import com.android.noteapp.databinding.FragmentAllnotesBinding
+import com.android.noteapp.ui.account.USER_LOGGED
 import com.android.noteapp.ui.adapter.NoteAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,13 +37,16 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
         _binding = FragmentAllnotesBinding.bind(view)
         (activity as AppCompatActivity).setSupportActionBar(binding!!.customToolBar)
 
-        binding?.newNoteFab?.setOnClickListener {
-            findNavController().navigate(R.id.action_allNotesFragment_to_newNoteFragment)
+        if(USER_LOGGED == true) {
+            binding?.newNoteFab?.isVisible = true
+            binding?.newNoteFab?.setOnClickListener {
+                findNavController().navigate(R.id.action_allNotesFragment_to_newNoteFragment)
+            }
         }
-        setupRecyclerView()
-        subscribeToNotes()
         setUpSwipeLayout()
         noteViewModel.syncNotes()
+        subscribeToNotes()
+        setupRecyclerView()
     }
 
     private fun setupRecyclerView(){
@@ -53,10 +59,12 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
 
         binding?.noteRecyclerView?.apply {
             adapter = noteAdapter
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
-            ItemTouchHelper(itemTouchHelperCallback)
-                .attachToRecyclerView(this)
+            if(USER_LOGGED == true) {
+                ItemTouchHelper(itemTouchHelperCallback)
+                    .attachToRecyclerView(this)
+            }
 
         }
     }
@@ -68,9 +76,9 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
     }
 
     private fun setUpSwipeLayout(){
-        binding?.swipeRefeeshLayout?.setOnRefreshListener {
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
             noteViewModel.syncNotes {
-                binding?.swipeRefeeshLayout?.isRefreshing = false
+                binding?.swipeRefreshLayout?.isRefreshing = false
             }
         }
     }

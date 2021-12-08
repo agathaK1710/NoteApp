@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/userSwipeRefresh"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -69,16 +69,28 @@
             app:layout_constraintHorizontal_bias="0.517"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/myNotesbtn"
+        <TextView
+            android:id="@+id/read_blog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="84dp"
+            android:layout_marginBottom="16dp"
             android:visibility="gone"
-            android:text="My notes"
+            android:text="View the list of films  without registration"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/read_blogReg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:text="View the list of films "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar

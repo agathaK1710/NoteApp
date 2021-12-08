@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.android.noteapp.R
 import com.android.noteapp.databinding.FragmentNewNoteBinding
+import com.android.noteapp.ui.account.USER_LOGGED
 
 class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
 
@@ -25,17 +26,44 @@ class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
 
         noteViewModel.oldNote = args.note
 
-        noteViewModel.oldNote?.noteTitle?.let {
-            binding?.newNoteTitleEditText?.setText(it)
+        if(USER_LOGGED == true){
+            noteViewModel.oldNote?.noteTitle?.let {
+                binding?.newNoteTitleEditText?.setText(it)
+            }
+
+            noteViewModel.oldNote?.desription?.let {
+                binding?.newNoteDescriptionEditText?.setText(it)
+            }
+
+            binding?.date?.isVisible = noteViewModel.oldNote != null
+            noteViewModel.oldNote?.date?.let {
+                binding?.date?.text = noteViewModel.milliToDate(it)
+            }
+
+        } else {
+            binding?.newNoteTitleEditText?.isVisible = false
+            binding?.newNoteTitleTextView?.isVisible = true
+            binding?.newNoteDescriptionEditText?.isVisible = false
+            binding?.newNoteDescriptionTextView?.isVisible = true
+            binding?.date?.isVisible = false
+            binding?.date1?.isVisible = true
+            binding?.scroll?.isVisible = true
+
+            noteViewModel.oldNote?.noteTitle?.let {
+                binding?.newNoteTitleTextView?.setText(it)
+            }
+
+            noteViewModel.oldNote?.desription?.let {
+                binding?.newNoteDescriptionTextView?.setText(it)
+            }
+
+            binding?.date1?.isVisible = noteViewModel.oldNote != null
+            noteViewModel.oldNote?.date?.let {
+                binding?.date1?.text = noteViewModel.milliToDate(it)
+            }
         }
 
-        noteViewModel.oldNote?.desription?.let {
-            binding?.newNoteDescriptionEditText?.setText(it)
-        }
-        binding?.date?.isVisible = noteViewModel.oldNote != null
-        noteViewModel.oldNote?.date?.let {
-            binding?.date?.text = noteViewModel.milliToDate(it)
-        }
+
     }
 
     override fun onPause() {
@@ -48,9 +76,16 @@ class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
     }
 
     private fun createNote() {
+        val noteTitle: String?
+        val description: String?
 
-        val noteTitle = binding?.newNoteTitleEditText?.text?.toString()?.trim()
-        val description = binding?.newNoteDescriptionEditText?.text?.toString()?.trim()
+        if(USER_LOGGED == true) {
+            noteTitle = binding?.newNoteTitleEditText?.text?.toString()?.trim()
+            description = binding?.newNoteDescriptionEditText?.text?.toString()?.trim()
+        } else {
+            noteTitle = binding?.newNoteTitleTextView?.text?.toString()?.trim()
+            description = binding?.newNoteDescriptionTextView?.text?.toString()?.trim()
+        }
 
         if(noteTitle.isNullOrEmpty() && description.isNullOrEmpty()){
             Toast.makeText(requireContext(), "Note is Empty!", Toast.LENGTH_SHORT).show()
@@ -61,8 +96,16 @@ class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
     }
     private fun updateNote() {
 
-        val noteTitle = binding?.newNoteTitleEditText?.text?.toString()?.trim()
-        val description = binding?.newNoteDescriptionEditText?.text?.toString()?.trim()
+        val noteTitle: String?
+        val description: String?
+
+        if(USER_LOGGED == true) {
+            noteTitle = binding?.newNoteTitleEditText?.text?.toString()?.trim()
+            description = binding?.newNoteDescriptionEditText?.text?.toString()?.trim()
+        } else {
+            noteTitle = binding?.newNoteTitleTextView?.text?.toString()?.trim()
+            description = binding?.newNoteDescriptionTextView?.text?.toString()?.trim()
+        }
 
         if(noteTitle.isNullOrEmpty() && description.isNullOrEmpty()) {
             noteViewModel.deleteNote(noteViewModel.oldNote!!.noteId)

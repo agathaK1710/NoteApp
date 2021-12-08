@@ -39,6 +39,7 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                 email.trim(),
                 password.trim()
             )
+            USER_LOGGED = true
         }
 
     }

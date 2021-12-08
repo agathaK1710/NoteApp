@@ -26,11 +26,6 @@ class NoteAdapter:RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
-
-
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
             ItemNoteBinding.inflate(

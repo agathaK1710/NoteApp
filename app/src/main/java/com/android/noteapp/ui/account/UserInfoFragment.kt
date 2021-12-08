@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+var USER_LOGGED: Boolean? = null
+
 @AndroidEntryPoint
 class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
 
@@ -28,7 +30,6 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentUserInfoBinding.bind(view)
 
-
         binding?.createAccountBtn?.setOnClickListener {
             findNavController().navigate(R.id.action_userInfoFragment_to_registerFragment)
         }
@@ -41,7 +42,11 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
             userViewModel.logout()
         }
 
-        binding?.myNotesbtn?.setOnClickListener{
+        binding?.readBlog?.setOnClickListener{
+            findNavController().navigate(R.id.action_userInfoFragment_to_allNotesFragment)
+        }
+
+        binding?.readBlogReg?.setOnClickListener{
             findNavController().navigate(R.id.action_userInfoFragment_to_allNotesFragment)
         }
         subscribeToCurrentUserEvents()
@@ -58,11 +63,13 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         userViewModel.currentUserState.collect {
             when(it){
                 is Result.Success -> {
+                    USER_LOGGED = true
                     userLoggedIn()
                     binding?.userTxt?.text = it.data?.name ?: "NO Name"
                     binding?.userEmail?.text = it.data?.email ?: "No Email"
                 }
                 is Result.Error -> {
+                    USER_LOGGED = false
                     userNotLoggedIn()
                     binding?.userTxt?.text = "Not Logged In!"
                 }
@@ -82,7 +89,8 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         binding?.createAccountBtn?.isVisible = false
         binding?.logoutBtn?.isVisible = true
         binding?.userEmail?.isVisible = true
-        binding?.myNotesbtn?.isVisible = true
+        binding?.readBlog?.isVisible = false
+        binding?.readBlogReg?.isVisible = true
     }
 
     private fun userNotLoggedIn(){
@@ -91,7 +99,8 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
         binding?.createAccountBtn?.isVisible = true
         binding?.logoutBtn?.isVisible = false
         binding?.userEmail?.isVisible = false
-        binding?.myNotesbtn?.isVisible = false
+        binding?.readBlog?.isVisible = true
+        binding?.readBlogReg?.isVisible = false
     }
 
 

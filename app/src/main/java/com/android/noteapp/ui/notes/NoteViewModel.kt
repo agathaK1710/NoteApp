@@ -14,23 +14,23 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteViewModel @Inject constructor(
     val noteRepo: NoteRepo
-): ViewModel(){
+) : ViewModel() {
 
     val notes = noteRepo.getAllNotes()
     var oldNote: LocalNote? = null
 
     fun syncNotes(
-        onDone: (()->Unit)? = null
-    ) = viewModelScope.launch{
+        onDone: (() -> Unit)? = null
+    ) = viewModelScope.launch {
 
         noteRepo.syncNotes()
         onDone?.invoke()
     }
 
     fun createNote(
-        noteTitle:String?,
-        description:String?
-    ) = viewModelScope.launch(Dispatchers.IO){
+        noteTitle: String?,
+        description: String?
+    ) = viewModelScope.launch(Dispatchers.IO) {
         val localNote = LocalNote(
             noteTitle = noteTitle,
             desription = description
@@ -39,11 +39,11 @@ class NoteViewModel @Inject constructor(
     }
 
     fun updateNote(
-        noteTitle:String?,
-        description:String?
+        noteTitle: String?,
+        description: String?
     ) = viewModelScope.launch(Dispatchers.IO) {
 
-        if(noteTitle == oldNote?.noteTitle && description == oldNote?.desription && oldNote?.connected == true){
+        if (noteTitle == oldNote?.noteTitle && description == oldNote?.desription && oldNote?.connected == true) {
             return@launch
         }
 
@@ -56,18 +56,18 @@ class NoteViewModel @Inject constructor(
     }
 
     fun deleteNote(
-        noteId:String
+        noteId: String
     ) = viewModelScope.launch {
         noteRepo.deleteNote(noteId)
     }
 
     fun undoDelete(
-        note:LocalNote
+        note: LocalNote
     ) = viewModelScope.launch {
         noteRepo.createNote(note)
     }
 
-    fun milliToDate(time:Long):String {
+    fun milliToDate(time: Long): String {
         val date = Date(time)
         val simpleDateFormat = SimpleDateFormat("hh:mm a | MMM d, yyyy", Locale.getDefault())
         return simpleDateFormat.format(date)
