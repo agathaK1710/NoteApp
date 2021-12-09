@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.android.noteapp.R
 import com.android.noteapp.databinding.FragmentNewNoteBinding
+import com.android.noteapp.ui.account.OK
 import com.android.noteapp.ui.account.USER_LOGGED
 
 class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
@@ -26,7 +27,7 @@ class NewNoteFragment: Fragment(R.layout.fragment_new_note) {
 
         noteViewModel.oldNote = args.note
 
-        if(USER_LOGGED == true){
+        if(USER_LOGGED == true && OK == true){
             noteViewModel.oldNote?.noteTitle?.let {
                 binding?.newNoteTitleEditText?.setText(it)
             }

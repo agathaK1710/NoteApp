@@ -15,6 +15,8 @@ import com.android.noteapp.databinding.FragmentLoginBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+var USER_EMAIL: String? = null
+
 class LoginFragment: Fragment(R.layout.fragment_login) {
 
     private var _binding: FragmentLoginBinding? = null
@@ -39,7 +41,8 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                 email.trim(),
                 password.trim()
             )
-            USER_LOGGED = true
+
+            USER_EMAIL = email.trim()
         }
 
     }
@@ -51,6 +54,8 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                     hideProgressBar()
                     Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
+                    USER_LOGGED = true
+
                 }
                 is Result.Error -> {
                     hideProgressBar()

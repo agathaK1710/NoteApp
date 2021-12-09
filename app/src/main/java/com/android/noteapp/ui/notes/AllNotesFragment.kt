@@ -15,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.android.noteapp.R
 import com.android.noteapp.databinding.FragmentAllnotesBinding
+import com.android.noteapp.ui.account.OK
+import com.android.noteapp.ui.account.USER_EMAIL
 import com.android.noteapp.ui.account.USER_LOGGED
 import com.android.noteapp.ui.adapter.NoteAdapter
+import com.android.noteapp.utils.Constants.ADMIN
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -52,7 +55,11 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
     private fun setupRecyclerView(){
 
         noteAdapter = NoteAdapter()
+        OK = USER_LOGGED
         noteAdapter.setOnItemClickListener {
+            if(USER_EMAIL != ADMIN && OK == true){
+                OK = false
+            }
             val action = AllNotesFragmentDirections.actionAllNotesFragmentToNewNoteFragment(it)
             findNavController().navigate(action)
         }
@@ -61,7 +68,7 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
             adapter = noteAdapter
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
-            if(USER_LOGGED == true) {
+            if(USER_LOGGED == true && USER_EMAIL == ADMIN) {
                 ItemTouchHelper(itemTouchHelperCallback)
                     .attachToRecyclerView(this)
             }

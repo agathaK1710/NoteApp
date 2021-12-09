@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 var USER_LOGGED: Boolean? = null
-
+var OK: Boolean? = null
 @AndroidEntryPoint
 class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
 

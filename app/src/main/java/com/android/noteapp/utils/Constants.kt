@@ -8,4 +8,5 @@ object Constants {
     const val BASE_URL = "https://immense-badlands-06517.herokuapp.com"
     const val MINIMUM_PASSWORD_LENGTH = 4
     const val MAXIMUM_PASSWORD_LENGTH = 8
+    const val ADMIN = "agatha.kazak@gmail.com"
 }
