@@ -1,7 +1,6 @@
 package com.android.noteapp.ui.account
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -78,5 +77,4 @@ private val userViewModel: UserViewModel by activityViewModels()
         super.onDestroy()
         _binding = null
     }
-
 }

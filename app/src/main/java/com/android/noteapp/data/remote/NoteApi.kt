@@ -1,5 +1,6 @@
 package com.android.noteapp.data.remote
 
+import com.android.noteapp.data.remote.models.LoginResponse
 import com.android.noteapp.data.remote.models.RemoteNote
 import com.android.noteapp.data.remote.models.SimpleResponse
 import com.android.noteapp.data.remote.models.User
@@ -11,13 +12,13 @@ interface NoteApi {
     @POST("$API_VERSION/users/register")
     suspend fun createAccount(
         @Body user: User
-    ): SimpleResponse
+    ): LoginResponse
 
     @Headers("Content-Type: application/json")
     @POST("$API_VERSION/users/login")
     suspend fun login(
         @Body user:User
-    ): SimpleResponse
+    ): LoginResponse
 
     // ======== NOTES ============
 

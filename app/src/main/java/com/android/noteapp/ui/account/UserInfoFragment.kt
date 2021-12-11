@@ -8,22 +8,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.noteapp.R
-import com.android.noteapp.utils.Result
 import com.android.noteapp.databinding.FragmentUserInfoBinding
+import com.android.noteapp.utils.Constants.ROLE
+import com.android.noteapp.utils.Result
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-var USER_LOGGED: Boolean? = null
-var OK: Boolean? = null
 @AndroidEntryPoint
-class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
+class UserInfoFragment : Fragment(R.layout.fragment_user_info) {
 
     private var _binding: FragmentUserInfoBinding? = null
     val binding: FragmentUserInfoBinding?
         get() = _binding
 
-    private val userViewModel:UserViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,15 +41,15 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
             userViewModel.logout()
         }
 
-        binding?.readBlog?.setOnClickListener{
-            findNavController().navigate(R.id.action_userInfoFragment_to_allNotesFragment)
+        if (isNotLogged()) {
+            binding?.readBlogReg?.isVisible = false
         }
 
-        binding?.readBlogReg?.setOnClickListener{
+        binding?.readBlogReg?.setOnClickListener {
             findNavController().navigate(R.id.action_userInfoFragment_to_allNotesFragment)
+
         }
         subscribeToCurrentUserEvents()
-
     }
 
     override fun onStart() {
@@ -59,17 +58,15 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
     }
 
 
-    private fun subscribeToCurrentUserEvents() = lifecycleScope.launch{
+    private fun subscribeToCurrentUserEvents() = lifecycleScope.launch {
         userViewModel.currentUserState.collect {
-            when(it){
+            when (it) {
                 is Result.Success -> {
-                    USER_LOGGED = true
                     userLoggedIn()
                     binding?.userTxt?.text = it.data?.name ?: "NO Name"
                     binding?.userEmail?.text = it.data?.email ?: "No Email"
                 }
                 is Result.Error -> {
-                    USER_LOGGED = false
                     userNotLoggedIn()
                     binding?.userTxt?.text = "Not Logged In!"
                 }
@@ -83,26 +80,25 @@ class UserInfoFragment:Fragment(R.layout.fragment_user_info) {
     }
 
 
-    private fun userLoggedIn(){
+    private fun userLoggedIn() {
         binding?.userProgressBar?.isVisible = false
         binding?.loginBtn?.isVisible = false
         binding?.createAccountBtn?.isVisible = false
         binding?.logoutBtn?.isVisible = true
         binding?.userEmail?.isVisible = true
-        binding?.readBlog?.isVisible = false
         binding?.readBlogReg?.isVisible = true
     }
 
-    private fun userNotLoggedIn(){
+    private fun userNotLoggedIn() {
         binding?.userProgressBar?.isVisible = false
         binding?.loginBtn?.isVisible = true
         binding?.createAccountBtn?.isVisible = true
         binding?.logoutBtn?.isVisible = false
         binding?.userEmail?.isVisible = false
-        binding?.readBlog?.isVisible = true
         binding?.readBlogReg?.isVisible = false
     }
 
+    fun isNotLogged() = (ROLE == null)
 
     override fun onDestroy() {
         super.onDestroy()

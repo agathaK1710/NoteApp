@@ -1,7 +1,6 @@
 package com.android.noteapp.ui.account
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -14,8 +13,6 @@ import com.android.noteapp.utils.Result
 import com.android.noteapp.databinding.FragmentLoginBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
-var USER_EMAIL: String? = null
 
 class LoginFragment: Fragment(R.layout.fragment_login) {
 
@@ -41,8 +38,6 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                 email.trim(),
                 password.trim()
             )
-
-            USER_EMAIL = email.trim()
         }
 
     }
@@ -54,7 +49,6 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                     hideProgressBar()
                     Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
-                    USER_LOGGED = true
 
                 }
                 is Result.Error -> {

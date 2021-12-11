@@ -7,6 +7,7 @@ import com.android.noteapp.data.local.models.LocalNote
 import com.android.noteapp.data.remote.NoteApi
 import com.android.noteapp.data.remote.models.RemoteNote
 import com.android.noteapp.data.remote.models.User
+import com.android.noteapp.utils.Constants.ROLE
 import com.android.noteapp.utils.Result
 import com.android.noteapp.utils.SessionManager
 import com.android.noteapp.utils.isNetworkConnected
@@ -173,7 +174,8 @@ class NoteRepoImpl @Inject constructor(
 
             val result = noteApi.createAccount(user)
             if(result.success){
-                sessionManager.updateSession(result.message,user.name ?:"",user.email)
+                sessionManager.updateSession(result.message,user.name ?:"",user.email, result.role)
+                ROLE = result.role
                 Result.Success<String>("User Created Successfully!")
             } else {
                 Result.Error<String>(result.message)
@@ -193,8 +195,9 @@ class NoteRepoImpl @Inject constructor(
 
             val result = noteApi.login(user)
             if(result.success){
-                sessionManager.updateSession(result.message,user.name ?:"",user.email)
+                sessionManager.updateSession(result.message,user.name ?:"",user.email, result.role)
                 getAllNotesFromServer()
+                ROLE = result.role
                 Result.Success<String>("Logged In Successfully!")
             } else {
                 Result.Error<String>(result.message)
@@ -222,6 +225,7 @@ class NoteRepoImpl @Inject constructor(
     override suspend fun logout(): Result<String> {
         return try {
             sessionManager.logout()
+            ROLE = null
             Result.Success<String>("Logged Out Succesfully")
         } catch (e:Exception){
             e.printStackTrace()

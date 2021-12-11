@@ -1,7 +1,6 @@
 package com.android.noteapp.ui.notes
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -10,37 +9,34 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.android.noteapp.R
+import com.android.noteapp.data.remote.models.Role
 import com.android.noteapp.databinding.FragmentAllnotesBinding
-import com.android.noteapp.ui.account.OK
-import com.android.noteapp.ui.account.USER_EMAIL
-import com.android.noteapp.ui.account.USER_LOGGED
 import com.android.noteapp.ui.adapter.NoteAdapter
-import com.android.noteapp.utils.Constants.ADMIN
+import com.android.noteapp.utils.Constants.ROLE
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
+class AllNotesFragment : Fragment(R.layout.fragment_allnotes) {
 
     private var _binding: FragmentAllnotesBinding? = null
     val binding: FragmentAllnotesBinding?
         get() = _binding
 
     private lateinit var noteAdapter: NoteAdapter
-    private val noteViewModel:NoteViewModel by activityViewModels()
+    private val noteViewModel: NoteViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAllnotesBinding.bind(view)
         (activity as AppCompatActivity).setSupportActionBar(binding!!.customToolBar)
 
-        if(USER_LOGGED == true) {
+        if(isAdmin()) {
             binding?.newNoteFab?.isVisible = true
             binding?.newNoteFab?.setOnClickListener {
                 findNavController().navigate(R.id.action_allNotesFragment_to_newNoteFragment)
@@ -52,14 +48,10 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
         setupRecyclerView()
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
 
         noteAdapter = NoteAdapter()
-        OK = USER_LOGGED
         noteAdapter.setOnItemClickListener {
-            if(USER_EMAIL != ADMIN && OK == true){
-                OK = false
-            }
             val action = AllNotesFragmentDirections.actionAllNotesFragmentToNewNoteFragment(it)
             findNavController().navigate(action)
         }
@@ -68,21 +60,20 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
             adapter = noteAdapter
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
-            if(USER_LOGGED == true && USER_EMAIL == ADMIN) {
+            if(isAdmin()) {
                 ItemTouchHelper(itemTouchHelperCallback)
                     .attachToRecyclerView(this)
             }
-
         }
     }
 
-    private fun subscribeToNotes() = lifecycleScope.launch{
+    private fun subscribeToNotes() = lifecycleScope.launch {
         noteViewModel.notes.collect {
             noteAdapter.notes = it
         }
     }
 
-    private fun setUpSwipeLayout(){
+    private fun setUpSwipeLayout() {
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             noteViewModel.syncNotes {
                 binding?.swipeRefreshLayout?.isRefreshing = false
@@ -90,7 +81,7 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
         }
     }
 
-    val itemTouchHelperCallback = object :ItemTouchHelper.SimpleCallback(
+    val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
         0,
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
     ) {
@@ -123,7 +114,7 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
     }
 
 
-        override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
@@ -143,7 +134,7 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.account -> {
                 findNavController().navigate(R.id.action_allNotesFragment_to_userInfoFragment)
             }
@@ -151,4 +142,6 @@ class AllNotesFragment: Fragment(R.layout.fragment_allnotes) {
 
         return super.onOptionsItemSelected(item)
     }
+
+    fun isAdmin() = (ROLE == Role.ADMIN)
 }

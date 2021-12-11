@@ -104,7 +104,7 @@ class UserViewModel @Inject constructor(
 
 
     private fun isEmailValid(email: String):Boolean {
-        var regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+        val regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
         val pattern = Pattern.compile(regex)
         return (email.isNotEmpty() && pattern.matcher(email).matches())
     }
